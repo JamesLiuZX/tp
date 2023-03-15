@@ -33,13 +33,16 @@ public class RecipeCard extends UiPart<Region> {
     @FXML
     private Label id;
     @FXML
-    private Label ingredient;
+    private Label portion;
     @FXML
-    private Label address;
+    private Label duration;
     @FXML
-    private Label email;
+    private Label tags;
     @FXML
-    private FlowPane tags;
+    private Label ingredients;
+    @FXML
+    private Label steps;
+    
 
     /**
      * Creates a {@code RecipeCode} with the given {@code Recipe} and index to display.
@@ -49,12 +52,10 @@ public class RecipeCard extends UiPart<Region> {
         this.recipe = recipe;
         id.setText(displayedIndex + ". ");
         name.setText(recipe.getName().recipeName);
-        ingredient.setText(recipe.getIngredient().value);
-        address.setText(recipe.getAddress().value);
-        email.setText(recipe.getEmail().value);
-        recipe.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        portion.setText(recipe.getPortion().toString());
+        duration.setText(recipe.getDuration().toString());
+        tags.setText(recipe.getTags().toString());
+        steps.setText(recipe.getSteps().toString());
     }
 
     @Override
