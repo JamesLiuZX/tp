@@ -1,12 +1,16 @@
 package seedu.recipe.model.recipe;
 
-import static seedu.recipe.commons.util.CollectionUtil.requireAllNonNull;
-
-import java.util.*;
-
-import seedu.recipe.model.recipe.exceptions.RecipeDurationNotPresentException;
 import seedu.recipe.model.recipe.exceptions.RecipePortionNotPresentException;
 import seedu.recipe.model.tag.Tag;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+
+import static seedu.recipe.commons.util.CollectionUtil.requireAllNonNull;
 
 /**
  * Represents a Recipe in the recipe book.
@@ -22,9 +26,9 @@ public class Recipe {
     // Data fields
     private Optional<RecipePortion> portion = Optional.empty();
     private Optional<RecipeDuration> duration = Optional.empty();
-    private Set<Tag> tags = Set.of();
-    private List<Ingredient> ingredients = List.of();
-    private List<Step> steps = List.of();
+    private Set<Tag> tags = new HashSet<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<Step> steps = new ArrayList<>();
 
     /**
      * Only the name field is required. The rest are optional (but recommended)
@@ -37,8 +41,13 @@ public class Recipe {
     public Name getName() {
         return name;
     }
+
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public void setIngredients(Ingredient... ingredients) {
+        this.ingredients.addAll(List.of(ingredients));
     }
 
     public RecipePortion getPortion() {
@@ -46,9 +55,17 @@ public class Recipe {
         return portion.get();
     }
 
+    public void setPortion(RecipePortion portion) {
+        this.portion = Optional.ofNullable(portion);
+    }
+
     public RecipeDuration getDuration() {
         duration.orElseThrow(RecipePortionNotPresentException::new);
         return duration.get();
+    }
+
+    public void setDuration(RecipeDuration duration) {
+        this.duration = Optional.ofNullable(duration);
     }
 
     // nullable variants of getPortion and getDuration
@@ -69,32 +86,19 @@ public class Recipe {
         return tags;
     }
 
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public void setPortion(RecipePortion portion) {
-        this.portion = Optional.ofNullable(portion);
-    }
-
-    public void setDuration(RecipeDuration duration) {
-        this.duration = Optional.ofNullable(duration);
-    }
-
     public void setTags(Tag... tags) {
-        for (Tag tag: tags) {
+        for (Tag tag : tags) {
             this.tags.add(tag);
         }
     }
 
-    public void setIngredients(Ingredient... ingredients) {
-        this.ingredients.addAll(List.of(ingredients));
+    public List<Step> getSteps() {
+        return steps;
     }
 
     public void setSteps(Step... steps) {
         this.steps.addAll(List.of(steps));
     }
-
 
 
     /**

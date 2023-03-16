@@ -1,28 +1,18 @@
 package seedu.recipe.storage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import com.fasterxml.jackson.annotation.JsonValue;
 import seedu.recipe.commons.exceptions.IllegalValueException;
 import seedu.recipe.model.recipe.Ingredient;
-import seedu.recipe.model.recipe.Name;
 import seedu.recipe.model.recipe.Recipe;
-import seedu.recipe.model.recipe.RecipeDuration;
-import seedu.recipe.model.recipe.RecipePortion;
 import seedu.recipe.model.recipe.Step;
-
-import seedu.recipe.model.recipe.unit.PortionUnit;
-
 import seedu.recipe.model.tag.Tag;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Jackson-friendly version of {@link Recipe}.
@@ -39,13 +29,13 @@ class JsonAdaptedRecipe {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Recipe's %s field is missing!";
 
     @JsonProperty("name")
-    private final Name name;
+    private final JsonAdaptedName name;
 
     @JsonProperty("portion")
-    private final RecipePortion portion;
+    private final Optional<JsonAdaptedRecipePortion> portion;
 
     @JsonProperty("duration")
-    private final RecipeDuration duration;
+    private final Optional<JsonAdaptedRecipeDuration> duration;
 
     @JsonProperty("tags")
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
@@ -61,9 +51,9 @@ class JsonAdaptedRecipe {
      */
     @JsonCreator
     public JsonAdaptedRecipe(
-            @JsonProperty("name") Name name,
-            @JsonProperty("portion") RecipePortion portion,
-            @JsonProperty("duration") RecipeDuration duration,
+            @JsonProperty("name") JsonAdaptedName name,
+            @JsonProperty("portion") Optional<JsonAdaptedRecipePortion> portion,
+            @JsonProperty("duration") Optional<JsonAdaptedRecipeDuration> duration,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("ingredient") List<JsonAdaptedIngredient> ingredients,
             @JsonProperty("steps") List<JsonAdaptedStep> steps) {
@@ -73,7 +63,7 @@ class JsonAdaptedRecipe {
 
         if (tags != null) {
             this.tags.addAll(tags);
-        };
+        }
 
         if (ingredients != null) {
             this.ingredients.addAll(ingredients);
@@ -88,30 +78,30 @@ class JsonAdaptedRecipe {
      * Converts a given {@code Recipe} into this class for Jackson use.
      */
     public JsonAdaptedRecipe(Recipe source) {
-        name = source.getName();
-        portion = source.getPortionNullable();
-        duration = source.getDurationNullable();
+        name = new JsonAdaptedName(source.getName());
+        portion = Optional.ofNullable(source.getPortionNullable()).map(JsonAdaptedRecipePortion::new);
+        duration = Optional.ofNullable(source.getDurationNullable()).map(JsonAdaptedRecipeDuration::new);
 
         tags.addAll(
                 source.getTags().stream()
-                    .map(JsonAdaptedTag::new)
-                    .collect(Collectors.toList())
-        );
+                        .map(JsonAdaptedTag::new)
+                        .collect(Collectors.toList())
+                   );
         ingredients.addAll(
                 source.getIngredients().stream()
                         .map(JsonAdaptedIngredient::new)
                         .collect(Collectors.toList())
-        );
+                          );
         steps.addAll(
                 source.getSteps().stream()
                         .map(JsonAdaptedStep::new)
                         .collect(Collectors.toList())
-        );
+                    );
     }
 
     /**
      * Converts this Jackson-friendly adapted recipe object into the model's {@code Recipe} object.
-     * Remember only name field is required, and the rest are optional. 
+     * Remember only name field is required, and the rest are optional.
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted recipe.
      */
@@ -125,15 +115,11 @@ class JsonAdaptedRecipe {
 //        final Name modelName = new Name(name);
 
 
-        Recipe res = new Recipe(name);
-        //Setter methods/overloaded constructor
-        if (portion != null) {
-            res.setPortion(portion);
-        }
+        Recipe res = new Recipe(name.toModelType());
 
-        if (duration != null) {
-            res.setDuration(duration);
-        }
+        // set portion and duration
+        res.setPortion(portion.flatMap(JsonAdaptedRecipePortion::toModelTypeOptional).orElse(null));
+        res.setDuration(duration.flatMap(JsonAdaptedRecipeDuration::toModelTypeOptional).orElse(null));
 
         List<Optional<Tag>> outTags = tags.stream()
                 .map(JsonAdaptedTag::toModelTypeOptional)

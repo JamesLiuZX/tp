@@ -21,6 +21,18 @@ public class RecipePortion {
     private static final String VALIDATION_REGEX =
             "^\\d+([\\s-]+to[\\s-]+\\d+|[\\s-]+-?[\\s-]*\\d+)?\\s+[A-Za-z0-9]+$";
 
+    public int getLowerRange() {
+        return lowerRange;
+    }
+
+    public int getUpperRange() {
+        return upperRange;
+    }
+
+    public PortionUnit getPortionUnit() {
+        return portionUnit;
+    }
+
     private final int lowerRange;
     private final int upperRange;
     private final PortionUnit portionUnit;
