@@ -12,15 +12,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import seedu.recipe.model.recipe.Ingredient;
 import seedu.recipe.model.recipe.Recipe;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class RecipePopup extends UiPart<Region>{
 
-    private static final String FXML = "RecipeListCard.fxml";
+    private static final String FXML = "RecipePopup.fxml";
 
     public final Recipe recipe;
 
@@ -55,6 +53,7 @@ public class RecipePopup extends UiPart<Region>{
         window.setMinHeight(300);
 
         Button closeButton = new Button("Close");
+        closeButton.getStyleClass().add("close-button");
         closeButton.setOnAction(event -> window.close());
         // Create a VBox to hold the RecipeCard
         VBox vbox = new VBox(getRoot(), closeButton);
@@ -97,6 +96,3 @@ public class RecipePopup extends UiPart<Region>{
                 .forEach(step -> steps.getChildren().add(new Label(step.toString())));
     }
 }
-
-//onMouseClicked="handleMouseClick" //for XML
-
