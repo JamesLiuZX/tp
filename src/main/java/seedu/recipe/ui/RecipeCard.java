@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -85,6 +86,17 @@ public class RecipeCard extends UiPart<Region> {
             RecipePopup popup = new RecipePopup(recipe, displayedIndex);
             popup.display();
         });
+        
+        /* 
+        cardPane.setOnKeyPressed(event -> {
+            System.out.println(event);
+            if (event.getCode() == KeyCode.DELETE) {
+                // Perform delete operation here
+                RecipePopup popup = new RecipePopup(recipe, displayedIndex);
+                popup.display();            
+            }
+        });
+        */
     }
 
     @Override
