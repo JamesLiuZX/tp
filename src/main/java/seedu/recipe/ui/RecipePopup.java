@@ -4,6 +4,7 @@ import static seedu.recipe.model.util.IngredientUtil.ingredientKeyValuePairToStr
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -73,20 +74,22 @@ public class RecipePopup extends UiPart<Region> {
                         .orElse("Portion was not added."));
 
         // Ingredients
+        AtomicInteger ingredientIndex = new AtomicInteger(1); // Initialize AtomicInteger for ingredients
         recipe.getIngredients()
             .forEach((ingredient, information) -> {
-                Label ingredientLabel = new Label(ingredientKeyValuePairToString(ingredient, information));
+                Label ingredientLabel = new Label(ingredientIndex.getAndIncrement() + ". " + ingredientKeyValuePairToString(ingredient, information));
                 ingredientLabel.setWrapText(true);
-                ingredientLabel.setMaxWidth(300);
+                ingredientLabel.setMaxWidth(500);
                 ingredients.getChildren().add(ingredientLabel);
             });
 
         // Steps
+        AtomicInteger stepIndex = new AtomicInteger(1); // Initialize AtomicInteger for steps
         recipe.getSteps()
             .forEach(step -> {
-                Label stepLabel = new Label(step.toString() + "\n");
+                Label stepLabel = new Label(stepIndex.getAndIncrement() + ". " + step.toString());
                 stepLabel.setWrapText(true);
-                stepLabel.setMaxWidth(300);
+                stepLabel.setMaxWidth(500);
                 steps.getChildren().add(stepLabel);
             });
 
@@ -106,6 +109,7 @@ public class RecipePopup extends UiPart<Region> {
         window.setTitle("Recipe Details");
         window.setMinWidth(500);
         window.setMinHeight(300);
+        window.setMaxHeight(700);
         VBox vbox = new VBox(getRoot());
         Scene scene = new Scene(vbox);
         scene.setOnKeyPressed(event -> {
