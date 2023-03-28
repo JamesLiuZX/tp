@@ -121,6 +121,7 @@ public class MainWindow extends UiPart<Stage> {
         });
     }
 
+    // Alson import method - Crashes the app, needs fixing
     @FXML
     private void handleImport() {
         ImportManager importManager = new ImportManager();
@@ -134,6 +135,7 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
+    // My test import method
     @FXML
     private void newHandleImport() {
         FileChooser fileChooser = new FileChooser();
