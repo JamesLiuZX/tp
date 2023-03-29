@@ -344,11 +344,13 @@
     -fx-border-width: 2;
 }
 
+/*
 #commandTypeLabel {
     -fx-font-size: 11px;
     -fx-text-fill: -fx-rd;
-}
+} */
 
+/*
 #commandTextField {
     -fx-background-color: derive(-fx-bg, 40%);
     -fx-background-radius: 8;
@@ -363,7 +365,7 @@
     -fx-font-family: "IBM Plex Sans Italic";
     -fx-font-size: 13pt;
     -fx-text-fill: derive(-fx-bg, 200%);
-}
+} */
 
 #filterField, #recipeListPanel, #recipeWebpage {
     -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);
@@ -402,7 +404,14 @@
     float: right;
 }
 
+/* RecipeListPanel, RecipeCard */
 .left-column {
-    -fx-border-color: #999999; 
-    -fx-border-width: 0 2px 0 0;
+    -fx-border-color: -fx-ctr;
+    -fx-border-width: 0 0.5 0 0;
 }
+
+.main-recipe-card {
+    -fx-padding: 10 0 10 0;
+}
+
+/* RecipeForm */
