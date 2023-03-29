@@ -50,6 +50,10 @@ public class RecipeCard extends UiPart<Region> {
      */
     public final Recipe recipe;
 
+    public static final String MESSAGE_EMPTY_FIELD = "No %s added yet. Add some!";
+    public static final String MESSAGE_EMPTY_FIELD_SHORT = "No %s added yet.";
+    public static final String MESSAGE_DELETE_CONFIRMATION = "Are you sure you want to delete this recipe?";
+
     @FXML
     private HBox cardPane;
 
@@ -104,20 +108,17 @@ public class RecipeCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         name.setText(recipe.getName().recipeName);
 
-        // ingredients.setOrientation(Orientation.VERTICAL);
-        // steps.setOrientation(Orientation.VERTICAL);
-
         //Duration
         duration.setText("Duration: "
                 + Optional.ofNullable(recipe.getDurationNullable())
                         .map(Object::toString)
-                        .orElse("Duration was not added."));
+                        .orElse(MESSAGE_EMPTY_FIELD_SHORT));
 
         //Portion
         portion.setText("Portion: "
                 + Optional.ofNullable(recipe.getPortionNullable())
                         .map(Object::toString)
-                        .orElse("Portion was not added."));
+                        .orElse(MESSAGE_EMPTY_FIELD_SHORT));
 
         //Ingredients
         setIngredients(recipe.getIngredients());
@@ -181,7 +182,7 @@ public class RecipeCard extends UiPart<Region> {
 
     private void setIngredients(HashMap<Ingredient, IngredientInformation> ingredientsTable) {
         if (ingredientsTable.size() == 0) {
-            ingredients.add(createLabel("No ingredients were added for this Recipe. Add some!"), 0, 0);
+            ingredients.add(createLabel(String.format(MESSAGE_EMPTY_FIELD, "ingredients")), 0, 0);
             return;
         }
         int count = 0;
@@ -201,7 +202,7 @@ public class RecipeCard extends UiPart<Region> {
 
     private void setSteps(List<Step> stepList) {
         if (stepList.size() == 0) {
-            steps.add(createLabel("No steps were added for this recipe. Add some!"), 0, 0);
+            steps.add(createLabel(String.format(MESSAGE_EMPTY_FIELD, "steps")), 0, 0);
             return;
         }
         int count = 1;
@@ -216,7 +217,7 @@ public class RecipeCard extends UiPart<Region> {
 
     private void setTags(Set<Tag> tagSet) {
         if (tagSet.size() == 0) {
-            Label emptyLabel = createLabel("No Tags were added. Add some!");
+            Label emptyLabel = createLabel(String.format(MESSAGE_EMPTY_FIELD, "tags"));
             emptyLabel.getStyleClass().add("empty-label");
             emptyTags.getChildren().add(emptyLabel);
             return;
@@ -249,7 +250,7 @@ public class RecipeCard extends UiPart<Region> {
 
         AtomicBoolean confirmed = new AtomicBoolean(false);
 
-        Label label = new Label("Are you sure you want to delete this recipe?");
+        Label label = new Label(MESSAGE_DELETE_CONFIRMATION);
         Button confirmButton = new Button("Confirm");
         Button cancelButton = new Button("Cancel");
         // set confirm button on action
