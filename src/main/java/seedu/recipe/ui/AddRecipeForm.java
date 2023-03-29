@@ -65,11 +65,11 @@ public class AddRecipeForm extends UiPart<Region> {
     /**
      * Creates a new AddRecipeForm instance.
      *
-     * @param stringBuilder The {@code StringBuilder} that stores the command string.
+     * @param commandString The {@code StringBuilder} that stores the command string.
      */
-    public AddRecipeForm(StringBuilder stringBuilder) {
+    public AddRecipeForm(StringBuilder commandString) {
         super(FXML);
-        this.commands = stringBuilder;
+        this.commands = commandString;
         TextField emptyIngredientField = createDynamicTextField("");
         ingredientsBox.getChildren().add(emptyIngredientField);
         TextField emptyStepField = createDynamicTextField("");
