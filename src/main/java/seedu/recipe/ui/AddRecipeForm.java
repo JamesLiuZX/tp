@@ -6,18 +6,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import seedu.recipe.commons.core.LogsCenter;
+import seedu.recipe.ui.util.FieldsUtil;
 
 /**
  * Represents the form element for users to add {@code Recipe}s
@@ -70,9 +69,9 @@ public class AddRecipeForm extends UiPart<Region> {
     public AddRecipeForm(StringBuilder commandString) {
         super(FXML);
         this.commands = commandString;
-        TextField emptyIngredientField = createDynamicTextField("");
+        TextField emptyIngredientField = FieldsUtil.createDynamicTextField("");
         ingredientsBox.getChildren().add(emptyIngredientField);
-        TextField emptyStepField = createDynamicTextField("");
+        TextField emptyStepField = FieldsUtil.createDynamicTextField("");
         stepsBox.getChildren().add(emptyStepField);
         // assert test on save button
         assert saveButton != null;
@@ -170,87 +169,6 @@ public class AddRecipeForm extends UiPart<Region> {
             }
         }
         return commands;
-    }
-
-    /**
-     * Returns the next TextField below the current TextField within the same parent VBox, if any.
-     *
-     * @param currentTextField The current TextField.
-     * @return The next TextField below the current TextField or null if there's no TextField below it.
-     */
-    private TextField getNextTextField(TextField currentTextField) {
-        VBox parentBox = (VBox) currentTextField.getParent();
-        int currentIndex = parentBox.getChildren().indexOf(currentTextField);
-        int lastIndex = parentBox.getChildren().size() - 1;
-        if (currentIndex < lastIndex) {
-            Node nextNode = parentBox.getChildren().get(currentIndex + 1);
-            if (nextNode instanceof TextField) {
-                return (TextField) nextNode;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Creates a dynamic TextField with the specified initial text.
-     * The TextField will support UP, DOWN, and TAB navigation.
-     * If the TextField is the last in the VBox and gains focus, a new empty TextField will be added below it.
-     * If the TextField loses focus and is the last in the VBox and empty, it will be removed.
-     *
-     * @param text The initial text for the TextField.
-     * @return The created dynamic TextField.
-     */
-    private TextField createDynamicTextField(String text) {
-        TextField textField = new TextField(text);
-
-        //Keyboard listener for navigation
-        textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            int currentIndex = ((VBox) textField.getParent()).getChildren().indexOf(textField);
-            if (event.getCode() == KeyCode.UP) {
-                // Condition 1: UP key pressed
-                if (currentIndex > 0) {
-                    TextField prevField = (TextField) ((VBox) textField.getParent())
-                                                                       .getChildren().get(currentIndex - 1);
-                    prevField.requestFocus();
-                }
-            } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.TAB) {
-                TextField nextField = (TextField) ((VBox) textField.getParent()).getChildren().get(currentIndex + 1);
-                // Condition 2.1: DOWN key pressed
-                if (event.getCode() == KeyCode.DOWN) {
-                    nextField.requestFocus();
-                // Condition 2.2: TAB key pressed
-                } else if (event.getCode() == KeyCode.TAB) {
-                    // If it is a new placeholder row and there's another TextField after it, skip to the field after
-                    if (nextField.getText().isEmpty() && currentIndex + 2
-                            < ((VBox) textField.getParent()).getChildren().size()) {
-                        nextField = (TextField) ((VBox) textField.getParent()).getChildren().get(currentIndex + 2);
-                    }
-                    nextField.requestFocus();
-                }
-                event.consume();
-            } else {
-                // Default: Do nothing
-            }
-        });
-        //Textfield listener for automatically adding/removing new input rows
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            VBox parentBox = (VBox) textField.getParent();
-            int lastIndex = parentBox.getChildren().size() - 1;
-            // Check if the TextField has gained focus
-            if (newValue) {
-                // Check if it's the last TextField in the VBox
-                if (parentBox.getChildren().indexOf(textField) == lastIndex) {
-                    TextField newField = createDynamicTextField("");
-                    parentBox.getChildren().add(newField);
-                }
-            } else {
-                // Check if it's the last TextField, it's empty, and the focus is not in the same VBox, then remove it
-                if (getNextTextField(textField).getText().isEmpty() && textField.getText().isEmpty()) {
-                    parentBox.getChildren().remove(getNextTextField(textField));
-                }
-            }
-        });
-        return textField;
     }
 
     /**
