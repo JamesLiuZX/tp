@@ -12,10 +12,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * A custom confirmation dialog class for handling user confirmation prompts.
+ */
 public class ConfirmationDialog {
 
     public static final String MESSAGE_DELETE_CONFIRMATION = "Are you sure you want to delete this recipe?";
 
+    /**
+     * Displays a confirmation dialog and returns the user's decision.
+     *
+     * @return true if the user confirms the action, false otherwise.
+     */
     public boolean getConfirmation() {
         Stage confirmationDialog = new Stage();
         confirmationDialog.initModality(Modality.APPLICATION_MODAL);

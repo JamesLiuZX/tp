@@ -7,12 +7,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
+/**
+ * A utility class containing methods for working with TextField components.
+ */
 public class FieldsUtil {
-
-    public FieldsUtil() {
-
-    }
-
     /**
      * Creates a dynamic TextField with the specified initial text.
      * The TextField will support UP, DOWN, and TAB navigation.
@@ -40,7 +38,8 @@ public class FieldsUtil {
             // Check if the TextField has gained focus
             if (newValue) {
                 addNewRow(parentBox, textField);
-            } else {
+            } 
+            else {
                 removeNewRow(parentBox, textField);
             }
         });
@@ -68,7 +67,14 @@ public class FieldsUtil {
 
         return null;
     }
-
+    
+    /**
+     * Handles keyboard navigation events for TextField components.
+     *
+     * @param event       The KeyEvent to handle.
+     * @param textField   The TextField to perform navigation on.
+     * @param currentIndex The index of the TextField in its parent VBox.
+     */
     public static void handleNavigation(KeyEvent event, TextField textField, int currentIndex) {
         TextField nextField = (TextField) ((VBox) textField.getParent()).getChildren().get(currentIndex + 1);
 
@@ -102,7 +108,13 @@ public class FieldsUtil {
         }
         event.consume();
     }
-
+    
+    /**
+     * Adds a new empty TextField to the end of the VBox if the provided TextField is the last one.
+     *
+     * @param parentBox The VBox containing the TextField.
+     * @param textField The TextField to check if it is the last one in the VBox.
+     */
     public static void addNewRow(VBox parentBox, TextField textField) {
         int lastIndex = parentBox.getChildren().size() - 1;
         // Check if it's the last TextField in the VBox
@@ -112,6 +124,12 @@ public class FieldsUtil {
         }
     };
 
+    /**
+     * Removes the empty TextField below the current TextField if both are empty and not focused.
+     *
+     * @param parentBox The VBox containing the TextField.
+     * @param textField The TextField to check for removal conditions.
+     */
     public static void removeNewRow(VBox parentBox, TextField textField) {
         // Check if it's the last TextField, it's empty, and the focus is not in the same VBox, then remove it
         if (getNextTextField(textField) != null

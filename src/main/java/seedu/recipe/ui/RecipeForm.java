@@ -193,7 +193,7 @@ public class RecipeForm extends UiPart<Region> {
         window.setScene(scene);
         window.showAndWait();
     }
-    
+
     /*----------------------------------------------------------------------------------------------------------- */
     // The following functions are helper functions used in the main code above.
     /**

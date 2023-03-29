@@ -44,8 +44,8 @@ public class RecipeCard extends UiPart<Region> {
      */
     public final Recipe recipe;
 
-    public static final String MESSAGE_EMPTY_FIELD = "No %s added yet. Add some!";
     public static final String MESSAGE_EMPTY_FIELD_SHORT = "No %s added yet.";
+    public static final String MESSAGE_EMPTY_FIELD = "No %s added yet. Add some!";
 
     @FXML
     private HBox cardPane;
