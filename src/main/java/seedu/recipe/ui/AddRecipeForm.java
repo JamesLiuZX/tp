@@ -97,14 +97,14 @@ public class AddRecipeForm extends UiPart<Region> {
             inputValues.put("portion", portionField.getText());
         }
         String ingredientsValue = ingredientsBox.getChildren().stream()
-            .map(node -> ((TextField) node).getText())
+            .map(node -> ((TextArea) node).getText())
             .collect(Collectors.joining(", "));
         if (!ingredientsValue.isEmpty()) {
             inputValues.put("ingredients", ingredientsValue);
         }
 
         String stepsValue = stepsBox.getChildren().stream()
-            .map(node -> ((TextField) node).getText())
+            .map(node -> ((TextArea) node).getText())
             .collect(Collectors.joining(", "));
         if (!stepsValue.isEmpty()) {
             inputValues.put("steps", stepsValue);
