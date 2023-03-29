@@ -32,9 +32,9 @@ import seedu.recipe.ui.events.DeleteRecipeEvent;
  * A UI component that displays information of a {@code Recipe}.
  */
 public class RecipeCard extends UiPart<Region> {
-    private static final String FXML = "RecipeListCard.fxml";
     public static final String MESSAGE_EMPTY_FIELD = "No %s added yet. Add some!";
     public static final String MESSAGE_EMPTY_FIELD_SHORT = "No %s added yet.";
+    private static final String FXML = "RecipeListCard.fxml";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -109,7 +109,7 @@ public class RecipeCard extends UiPart<Region> {
         portion.setText("Portion: "
                 + Optional.ofNullable(recipe.getPortionNullable())
                         .map(Object::toString)
-                        .orElse(String.format(MESSAGE_EMPTY_FIELD_SHORT,"portion")));
+                        .orElse(String.format(MESSAGE_EMPTY_FIELD_SHORT, "portion")));
 
         //Ingredients
         setIngredients(recipe.getIngredients());

@@ -21,8 +21,11 @@ public class FieldsUtil {
      * @return The created dynamic TextArea.
      */
     public static TextArea createDynamicTextArea(String text) {
+        //Styling
         TextArea textArea = new TextArea(text);
-
+        textArea.setWrapText(true);
+        textArea.setMaxHeight(5.0);
+        textArea.setPrefHeight(5.0);
         //Keyboard listener for navigation
         textArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             int currentIndex = ((VBox) textArea.getParent()).getChildren().indexOf(textArea);
