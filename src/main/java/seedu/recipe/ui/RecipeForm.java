@@ -9,12 +9,20 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 //JavaFX imports
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -33,6 +41,7 @@ import seedu.recipe.ui.util.FieldsUtil;
  */
 public class RecipeForm extends UiPart<Region> {
     private static final String FXML = "RecipeForm.fxml";
+    private static final String INGREDIENT_PROMPT = "(i.e. `a/100 g n/parmesan cheese r/grated s/mozzarella`";
 
     @FXML
     private TextField nameField;
@@ -54,6 +63,9 @@ public class RecipeForm extends UiPart<Region> {
 
     @FXML
     private VBox stepsBox;
+
+    @FXML
+    private Region buttonCtrLeft;
 
     @FXML
     private Button saveButton;
@@ -88,13 +100,8 @@ public class RecipeForm extends UiPart<Region> {
         this.displayedIndex = displayedIndex;
         if (recipe != null) {
             populateFields();
-        } else {
-            TextField emptyIngredientField = FieldsUtil.createDynamicTextField("");
-            ingredientsBox.getChildren().add(emptyIngredientField);
-            TextField emptyStepField = FieldsUtil.createDynamicTextField("");
-            stepsBox.getChildren().add(emptyStepField);
         }
-        assert saveButton != null;
+        HBox.setHgrow(buttonCtrLeft, Priority.ALWAYS);
         saveButton.setOnAction(event -> saveRecipe());
         cancelButton.setOnAction(event -> closeForm());
     }
@@ -124,12 +131,12 @@ public class RecipeForm extends UiPart<Region> {
                 break;
             case "ingredients":
                 currentValue = ingredientsBox.getChildren().stream()
-                    .map(node -> ((TextField) node).getText())
+                    .map(node -> ((TextArea) node).getText())
                     .collect(Collectors.joining(", "));
                 break;
             case "steps":
                 currentValue = stepsBox.getChildren().stream()
-                    .map(node -> ((TextField) node).getText())
+                    .map(node -> ((TextArea) node).getText())
                     .collect(Collectors.joining(", "));
                 break;
             case "tags":
@@ -178,9 +185,10 @@ public class RecipeForm extends UiPart<Region> {
         //Set dimensions, scene graph
         window.setMinWidth(500);
         window.setMinHeight(700);
-        VBox vbox = new VBox(getRoot());
-        vbox.setStyle("-fx-background-color: #3f3f46");
-        Scene scene = new Scene(vbox);
+        window.setResizable(false);
+        ScrollPane pane = new ScrollPane(getRoot());
+        pane.setStyle("-fx-background-color: #3f3f46");
+        Scene scene = new Scene(pane);
 
         //Event handler for Escape Key
         scene.setOnKeyPressed(event -> {
@@ -207,11 +215,11 @@ public class RecipeForm extends UiPart<Region> {
         initialValues.put("duration", durationField.getText());
         initialValues.put("portion", portionField.getText());
         initialValues.put("ingredients", ingredientsBox.getChildren().stream()
-            .map(node -> ((TextField) node).getText())
+            .map(node -> ((TextArea) node).getText())
             .collect(Collectors.joining(", ")));
 
         initialValues.put("steps", stepsBox.getChildren().stream()
-            .map(node -> ((TextField) node).getText())
+            .map(node -> ((TextArea) node).getText())
             .collect(Collectors.joining(", ")));
 
         initialValues.put("tags", tagsField.getText());
@@ -227,35 +235,39 @@ public class RecipeForm extends UiPart<Region> {
         durationField.setText(
             Optional.ofNullable(recipe.getDurationNullable())
                 .map(Object::toString)
-                .orElse("Duration was not added.")
+                .orElse("")
         );
         //Portion
         portionField.setText(
             Optional.ofNullable(recipe.getPortionNullable())
                 .map(Object::toString)
-                .orElse("Portion was not added.")
+                .orElse("")
         );
 
         //Ingredients
         if (!recipe.getIngredients().isEmpty()) {
             recipe.getIngredients().forEach((ingredient, information) -> {
-                TextField ingredientField = new TextField(ingredient.toString());
+                TextArea ingredientField = FieldsUtil.createDynamicTextArea(ingredient.toString());
+                ingredientField.setWrapText(true);
                 ingredientsBox.getChildren().add(ingredientField);
             });
         } else {
-            TextField ingredientField = FieldsUtil.createDynamicTextField("Field is not added.");
-            ingredientsBox.getChildren().add(ingredientField);
+            TextArea emptyIngredientField = FieldsUtil.createDynamicTextArea("");
+            emptyIngredientField.setPromptText("Add an ingredient " + INGREDIENT_PROMPT);
+            ingredientsBox.getChildren().add(emptyIngredientField);
         }
 
         //Steps
         if (!recipe.getSteps().isEmpty()) {
             recipe.getSteps().forEach(step -> {
-                TextField stepField = FieldsUtil.createDynamicTextField(step.toString());
+                TextArea stepField = FieldsUtil.createDynamicTextArea(step.toString());
+                stepField.setWrapText(true);
                 stepsBox.getChildren().add(stepField);
             });
         } else {
-            TextField stepField = FieldsUtil.createDynamicTextField("Field is not added.");
-            stepsBox.getChildren().add(stepField);
+            TextArea emptyStepField = FieldsUtil.createDynamicTextArea("");
+            emptyStepField.setPromptText("Add a step");
+            stepsBox.getChildren().add(emptyStepField);
         }
 
         //Tags
@@ -265,7 +277,7 @@ public class RecipeForm extends UiPart<Region> {
                 .map(tag -> tag.tagName)
                 .collect(Collectors.joining(", ")));
         } else {
-            tagsField.setText("Field is not added.");
+            tagsField.setText("");
         }
 
         storeInitialValues();
@@ -354,6 +366,7 @@ public class RecipeForm extends UiPart<Region> {
             commands.append(index);
             commands = collectFields(commands, changedValues);
             String commandText = "edit " + commands.toString();
+
             executeCommand(commandText);
         } catch (CommandException | ParseException e) {
             logger.info("Failed to edit recipe: " + index);

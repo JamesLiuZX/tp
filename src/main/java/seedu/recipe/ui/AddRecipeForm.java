@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
@@ -69,9 +70,9 @@ public class AddRecipeForm extends UiPart<Region> {
     public AddRecipeForm(StringBuilder commandString) {
         super(FXML);
         this.commands = commandString;
-        TextField emptyIngredientField = FieldsUtil.createDynamicTextField("");
+        TextArea emptyIngredientField = FieldsUtil.createDynamicTextArea("");
         ingredientsBox.getChildren().add(emptyIngredientField);
-        TextField emptyStepField = FieldsUtil.createDynamicTextField("");
+        TextArea emptyStepField = FieldsUtil.createDynamicTextArea("");
         stepsBox.getChildren().add(emptyStepField);
         // assert test on save button
         assert saveButton != null;

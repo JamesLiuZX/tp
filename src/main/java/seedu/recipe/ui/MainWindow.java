@@ -59,7 +59,7 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane resultDisplayPlaceholder;
 
     @FXML
-    private StackPane statusbarPlaceholder;
+    private StackPane statusBarPlaceholder;
 
     /**
      * Constructor that creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
@@ -104,6 +104,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+        setAccelerator(importMenuItem, KeyCombination.valueOf("F3"));
     }
 
     /**
@@ -121,7 +122,9 @@ public class MainWindow extends UiPart<Stage> {
         });
     }
 
-    // Alson import method - Crashes the app, needs fixing
+    /**
+     * Handles the import file action for importing an existing Recipe Book JSON file into the app.
+     */
     @FXML
     private void handleImport() {
         ImportManager importManager = new ImportManager(primaryStage);
@@ -135,6 +138,9 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
+    /**
+     * Handles the export file action for exporting the current Recipe Book JSON file.
+     */
     @FXML
     private void handleExport() {
         ExportManager exportManager = new ExportManager(primaryStage);
@@ -165,12 +171,6 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        // Assertions to check if placeholders are not null
-        assert recipeListPanelPlaceholder != null : "RecipeListPanel placeholder cannot be null";
-        assert resultDisplayPlaceholder != null : "ResultDisplay placeholder cannot be null";
-        assert statusbarPlaceholder != null : "Status bar placeholder cannot be null";
-        assert commandBoxPlaceholder != null : "Command box placeholder cannot be null";
-
         recipeListPanel = new RecipeListPanel(logic.getFilteredRecipeList(), this::executeCommand);
         recipeListPanelPlaceholder.getChildren().add(recipeListPanel.getRoot());
 
@@ -178,7 +178,7 @@ public class MainWindow extends UiPart<Stage> {
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
         StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getRecipeBookFilePath());
-        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
+        statusBarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
@@ -208,11 +208,12 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
     /**
-     * Makes the primary stage of this main window visible.
+     * Renders the primary stage of this main window visible.
      */
     void show() {
         primaryStage.show();
     }
+
     /**
      * Closes the application.
      */
