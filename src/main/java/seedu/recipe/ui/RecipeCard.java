@@ -32,8 +32,9 @@ import seedu.recipe.ui.events.DeleteRecipeEvent;
  * A UI component that displays information of a {@code Recipe}.
  */
 public class RecipeCard extends UiPart<Region> {
-
     private static final String FXML = "RecipeListCard.fxml";
+    public static final String MESSAGE_EMPTY_FIELD = "No %s added yet. Add some!";
+    public static final String MESSAGE_EMPTY_FIELD_SHORT = "No %s added yet.";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -43,9 +44,6 @@ public class RecipeCard extends UiPart<Region> {
      * @see <a href="https://github.com/se-edu/recipebook-level4/issues/336">The issue on RecipeBook level 4</a>
      */
     public final Recipe recipe;
-
-    public static final String MESSAGE_EMPTY_FIELD_SHORT = "No %s added yet.";
-    public static final String MESSAGE_EMPTY_FIELD = "No %s added yet. Add some!";
 
     @FXML
     private HBox cardPane;
@@ -105,13 +103,13 @@ public class RecipeCard extends UiPart<Region> {
         duration.setText("Duration: "
                 + Optional.ofNullable(recipe.getDurationNullable())
                         .map(Object::toString)
-                        .orElse(MESSAGE_EMPTY_FIELD_SHORT));
+                        .orElse(String.format(MESSAGE_EMPTY_FIELD_SHORT, "duration")));
 
         //Portion
         portion.setText("Portion: "
                 + Optional.ofNullable(recipe.getPortionNullable())
                         .map(Object::toString)
-                        .orElse(MESSAGE_EMPTY_FIELD_SHORT));
+                        .orElse(String.format(MESSAGE_EMPTY_FIELD_SHORT,"portion")));
 
         //Ingredients
         setIngredients(recipe.getIngredients());
