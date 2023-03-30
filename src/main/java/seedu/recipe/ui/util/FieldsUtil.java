@@ -183,8 +183,8 @@ public class FieldsUtil {
             if (nearViewportTop || nearViewportBottom) {
                 // Adjust scroll value by one row height
                 double scrollValueAdjustment = rowHeight / scrollPane.getContent().getBoundsInLocal().getHeight();
-                double newVvalue = nearViewportTop 
-                    ? scrollPane.getVvalue() - scrollValueAdjustment 
+                double newVvalue = nearViewportTop
+                    ? scrollPane.getVvalue() - scrollValueAdjustment
                     : scrollPane.getVvalue() + scrollValueAdjustment;
                 scrollPane.setVvalue(newVvalue);
             }
