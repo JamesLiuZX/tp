@@ -68,7 +68,7 @@ public class ConfirmationDialog {
         label.setStyle("-fx-font-size: 14px;");
         confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         cancelButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-        buttons.setBackground(new Background(new BackgroundFill(Color.rgb(56, 56, 56), CornerRadii.EMPTY, null)));   
+        buttons.setBackground(new Background(new BackgroundFill(Color.rgb(56, 56, 56), CornerRadii.EMPTY, null)));
         // initialize VBox layout
         VBox layout = new VBox(10);
         layout.setBackground(new Background(new BackgroundFill(Color.rgb(56, 56, 56), CornerRadii.EMPTY, null)));
