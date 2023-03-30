@@ -130,11 +130,26 @@ public class MainWindow extends UiPart<Stage> {
         ImportManager importManager = new ImportManager(primaryStage);
         try {
             ObservableList<Recipe> importedRecipes = importManager.execute();
-            for (Recipe recipe : importedRecipes) {
-                System.out.println("Recipe: " + recipe.toString());
+            if (importedRecipes == null) {
+                logger.info("No file selected");
+                resultDisplay.setFeedbackToUser("No file selected");
+                return;
             }
-        } catch (DataConversionException | IOException | IllegalValueException e) {
-            System.out.println(e.getMessage());
+
+            // Marked for refactor into separate util class
+            // Validate uniqueness
+            ObservableList<Recipe> currentRecipes = logic.getFilteredRecipeList();
+            for (Recipe recipe : importedRecipes) {
+                if (!currentRecipes.stream().anyMatch(recipe::isSameRecipe)) {
+                    String commandText = "add" + importManager.getCommandText(recipe);
+                    logic.execute(commandText);
+                }
+            }
+            logger.info("Import Successfully");
+            resultDisplay.setFeedbackToUser("Import Successfully");
+        } catch (DataConversionException | IOException | IllegalValueException | CommandException e) {
+            logger.info("Invalid import: " + e.getMessage());
+            resultDisplay.setFeedbackToUser(e.getMessage());
         }
     }
 

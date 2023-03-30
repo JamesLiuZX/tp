@@ -12,6 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -23,7 +25,7 @@ import seedu.recipe.ui.util.FieldsUtil;
  * Represents the form element for users to add {@code Recipe}s
  */
 public class AddRecipeForm extends UiPart<Region> {
-    private static final String FXML = "RecipeForm.fxml";
+    private static final String FXML = "AddRecipeForm.fxml";
 
     @FXML
     private TextField nameField;
@@ -45,6 +47,9 @@ public class AddRecipeForm extends UiPart<Region> {
 
     @FXML
     private VBox stepsBox;
+
+    @FXML
+    private Region buttonCtrLeft;
 
     @FXML
     private Button saveButton;
@@ -74,8 +79,8 @@ public class AddRecipeForm extends UiPart<Region> {
         ingredientsBox.getChildren().add(emptyIngredientField);
         TextArea emptyStepField = FieldsUtil.createDynamicTextArea("");
         stepsBox.getChildren().add(emptyStepField);
-        // assert test on save button
-        assert saveButton != null;
+
+        HBox.setHgrow(buttonCtrLeft, Priority.ALWAYS);
         saveButton.setOnAction(event -> saveRecipe());
         cancelButton.setOnAction(event -> closeForm());
     }
@@ -190,10 +195,12 @@ public class AddRecipeForm extends UiPart<Region> {
         // Ensures users do not exit the view by clicking outside
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Recipe");
-        window.setMinWidth(500);
-        window.setMinHeight(700);
-        VBox vbox = new VBox(getRoot());
-        Scene scene = new Scene(vbox);
+        window.setResizable(false);
+
+        //Individual elements
+        VBox pane = new VBox(getRoot());
+        pane.setStyle("-fx-background-color: #3f3f46");
+        Scene scene = new Scene(pane);
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 window.close();

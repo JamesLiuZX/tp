@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -177,13 +176,12 @@ public class RecipeForm extends UiPart<Region> {
         // Ensures users do not exit the view by clicking outside
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(recipe == null ? "Add Recipe" : "Edit Recipe");
+        window.setResizable(false);
 
         //Set dimensions, scene graph
-        window.setMinWidth(500);
-        window.setMinHeight(700);
-        window.setResizable(false);
-        ScrollPane pane = new ScrollPane(getRoot());
+        VBox pane = new VBox(getRoot());
         pane.setStyle("-fx-background-color: #3f3f46");
+
         Scene scene = new Scene(pane);
 
         //Event handler for Escape Key
